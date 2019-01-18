@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class SessionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest',[
+            'only'=>'create',
+        ]);
+    }
+
     //
     public function create(){
         return view('session.create');
@@ -21,7 +28,9 @@ class SessionController extends Controller
 
         if(Auth::attempt($data,$request->has('remember'))){
             session()->flash('success','欢迎回来');
-            return redirect()->route('users.show',[Auth::user()]);
+            //可跳转到上个页面，如果没有上一个页面，则跳转到user.show
+            return redirect()->intended(route('users.show',[Auth::user()]));
+            //return redirect()->route('users.show',[Auth::user()]);
         }else{
             session()->flash('danger','账号或密码错误');
             return redirect()->back();
