@@ -22,4 +22,9 @@ Route::get('/test', function () {
     return view('test');
 });
 
+//session
+Route::get('login','SessionController@create')->name('login');
+Route::post('login','SessionController@store')->name('login');
+Route::delete('logout','SessionController@destroy')->name('logout');
+
 
